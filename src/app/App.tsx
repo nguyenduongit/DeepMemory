@@ -24,7 +24,6 @@ export const App: React.FC = () => {
     syncModuleFromSupabase('numbers-00-99');
   }, [loadSettings]);
 
-  // Render view according to current route
   const renderView = () => {
     switch (currentRoute.name) {
       case 'launchpad':
@@ -34,28 +33,20 @@ export const App: React.FC = () => {
             <LaunchpadView />
           </>
         );
-
       case 'module-home':
         return <ModuleHomeView moduleId={currentRoute.moduleId} />;
-
       case 'learning':
         return <UniversalLearningView moduleId={currentRoute.moduleId} />;
-
       case 'training-setup':
         return <TrainingSetupView moduleId={currentRoute.moduleId} />;
-
       case 'training-session':
         return <TrainingSessionView moduleId={currentRoute.moduleId} />;
-
       case 'result':
         return <ResultView moduleId={currentRoute.moduleId} />;
-
       case 'statistics':
         return <StatisticsView />;
-
       case 'settings':
         return <SettingsView />;
-
       default:
         return (
           <>
@@ -67,9 +58,11 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-indigo-600 selection:text-white">
-      <main className="flex-1 w-full">{renderView()}</main>
-      <BottomNav />
+    <div className="app-shell bg-slate-950 text-slate-100 selection:bg-indigo-600 selection:text-white">
+      <main className="app-content flex flex-col w-full">{renderView()}</main>
+      <div className="app-footer">
+        <BottomNav />
+      </div>
     </div>
   );
 };
