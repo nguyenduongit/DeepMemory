@@ -72,7 +72,10 @@ const PeriodicTableOverviewComponent: React.FC<LearningOverviewProps<ChemicalEle
         ))}
       </div>
 
-      <div className="app-scroll flex-1 min-h-0 rounded-2xl border border-slate-800 bg-slate-900/50 p-3">
+      <div
+        className="flex-1 min-h-0 overflow-auto overscroll-contain rounded-2xl border border-slate-800 bg-slate-900/50 p-3 [-webkit-overflow-scrolling:touch]"
+        style={{ touchAction: 'pan-x pan-y' }}
+      >
         <div className="min-w-[970px] mx-auto w-max">
           <div
             className="grid gap-1"
