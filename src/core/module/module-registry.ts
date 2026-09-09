@@ -2,7 +2,8 @@ import { ModuleDefinition, ModuleCategory } from './module-types';
 import { numbersModule } from '../../modules/numbers';
 import { memoryCardsModule, memoryPalaceModule } from '../../modules/memory/placeholder';
 import { flagsModule, mapsModule, capitalsModule, countriesModule } from '../../modules/geography/placeholder';
-import { periodicTableModule, solarSystemModule } from '../../modules/science/placeholder';
+import { solarSystemModule } from '../../modules/science/placeholder';
+import { periodicTableModule } from '../../modules/periodic-table';
 import { englishVocabModule } from '../../modules/language/placeholder';
 import { validateModuleRegistry } from './module-validator';
 

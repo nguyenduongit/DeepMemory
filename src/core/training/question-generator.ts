@@ -59,7 +59,14 @@ export function generateQuestions<TItem>(
 
     // Generate 3 unique distractors (pass pool or full module items if pool is smaller than 4)
     const distractorSource = pool.length >= 4 ? pool : module.items;
-    const distractorContents = generateDistractors(distractorSource, item, mode, 3);
+    let distractorContents = generateDistractors(distractorSource, item, mode, 3);
+
+    // A group can contain many items but only one answer value (for example,
+    // every item in the "Khí hiếm" group has the same category). In that case,
+    // top up from the complete module so the quiz still renders four choices.
+    if (distractorContents.length < 3 && distractorSource !== module.items) {
+      distractorContents = generateDistractors(module.items, item, mode, 3);
+    }
 
     // Build QuizOption array
     const rawOptions: QuizOption[] = [

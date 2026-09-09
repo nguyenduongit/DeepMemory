@@ -19,7 +19,6 @@ export const QuizProgress: React.FC<QuizProgressProps> = ({
 
   useEffect(() => {
     if (!isRunning || !startedAt) {
-      setElapsedMs(0);
       return;
     }
 
@@ -33,6 +32,7 @@ export const QuizProgress: React.FC<QuizProgressProps> = ({
 
   const progressPercent =
     totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
+  const displayedElapsedMs = isRunning && startedAt ? elapsedMs : 0;
 
   return (
     <div className="w-full space-y-2 select-none">
@@ -47,7 +47,7 @@ export const QuizProgress: React.FC<QuizProgressProps> = ({
 
         {/* Stopwatch timer */}
         <div className="font-mono font-bold text-sm tracking-wider text-indigo-400 bg-indigo-950/40 px-2.5 py-1 rounded-lg border border-indigo-500/20">
-          {formatDuration(elapsedMs)}
+          {formatDuration(displayedElapsedMs)}
         </div>
       </div>
 

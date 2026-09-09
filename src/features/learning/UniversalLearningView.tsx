@@ -10,7 +10,7 @@ import {
   clampIndex,
 } from '../../core/learning/learning-engine';
 import { ProgressBar } from '../../components/ui/ProgressBar';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Grid3X3, Layers3 } from 'lucide-react';
 
 interface UniversalLearningViewProps {
   moduleId: string;
@@ -22,6 +22,9 @@ export const UniversalLearningView: React.FC<UniversalLearningViewProps> = ({ mo
 
   const [selectedGroupId, setSelectedGroupId] = useState<string>(module?.groups?.[0]?.id || '');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [viewMode, setViewMode] = useState<'overview' | 'cards'>(
+    module?.learning.overview ? 'overview' : 'cards',
+  );
 
   const selectedGroup = module?.groups?.find((g) => g.id === selectedGroupId);
   const items = filterItemsByGroup(module?.items || [], selectedGroup);
@@ -30,11 +33,11 @@ export const UniversalLearningView: React.FC<UniversalLearningViewProps> = ({ mo
 
   const handleNext = useCallback(() => {
     setCurrentIndex((prev) => getNextIndex(prev, totalCount));
-  }, [totalCount]);
+  }, [totalCount, setCurrentIndex]);
 
   const handlePrev = useCallback(() => {
     setCurrentIndex((prev) => getPrevIndex(prev, totalCount));
-  }, [totalCount]);
+  }, [totalCount, setCurrentIndex]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -67,6 +70,16 @@ export const UniversalLearningView: React.FC<UniversalLearningViewProps> = ({ mo
   const subtitle = module.learning.subtitle ? module.learning.subtitle(currentItem) : undefined;
   const detail = module.learning.detail ? module.learning.detail(currentItem) : undefined;
   const progressPercent = totalCount > 0 ? ((currentIndex + 1) / totalCount) * 100 : 0;
+  const Overview = module.learning.overview;
+
+  const handleSelectOverviewItem = (item: any) => {
+    const fullGroup = module.groups?.find((group) => module.items.every(group.filter));
+    if (fullGroup && fullGroup.id !== selectedGroupId) {
+      setSelectedGroupId(fullGroup.id);
+    }
+    setCurrentIndex(module.items.indexOf(item));
+    setViewMode('cards');
+  };
 
   return (
     <section className="h-full min-h-0 flex flex-col overflow-hidden">
@@ -98,20 +111,47 @@ export const UniversalLearningView: React.FC<UniversalLearningViewProps> = ({ mo
         />
       </div>
 
-      <div className="flex-1 min-h-0 w-full max-w-2xl mx-auto px-4 sm:px-6 py-2 sm:py-3 flex items-center justify-center overflow-hidden">
-        <div className="w-full max-h-full flex items-center justify-center">
-          <LearningCard
-            primary={primaryContent}
-            title={title}
-            subtitle={subtitle}
-            detail={detail}
-            currentIndex={currentIndex}
-            totalCount={totalCount}
-            onNext={handleNext}
-            onPrev={handlePrev}
-          />
+      {Overview && (
+        <div className="flex-none flex justify-center py-2 border-b border-slate-800/70 bg-slate-950/80">
+          <div className="inline-flex rounded-xl bg-slate-900 border border-slate-800 p-1">
+            <button
+              type="button"
+              onClick={() => setViewMode('overview')}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${viewMode === 'overview' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
+            >
+              <Grid3X3 className="w-3.5 h-3.5" /> Bảng
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('cards')}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${viewMode === 'cards' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
+            >
+              <Layers3 className="w-3.5 h-3.5" /> Thẻ
+            </button>
+          </div>
         </div>
-      </div>
+      )}
+
+      {Overview && viewMode === 'overview' ? (
+        <div className="flex-1 min-h-0 overflow-hidden">
+          <Overview items={module.items} onSelectItem={handleSelectOverviewItem} />
+        </div>
+      ) : (
+        <>
+          <div className="flex-1 min-h-0 w-full max-w-2xl mx-auto px-4 sm:px-6 py-2 sm:py-3 flex items-center justify-center overflow-hidden">
+            <div className="w-full max-h-full flex items-center justify-center">
+              <LearningCard
+                primary={primaryContent}
+                title={title}
+                subtitle={subtitle}
+                detail={detail}
+                currentIndex={currentIndex}
+                totalCount={totalCount}
+                onNext={handleNext}
+                onPrev={handlePrev}
+              />
+            </div>
+          </div>
 
       <div className="flex-none w-full bg-slate-950/90 backdrop-blur-md border-t border-slate-800/80 px-4 sm:px-6 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <div className="max-w-md mx-auto space-y-2">
@@ -150,7 +190,9 @@ export const UniversalLearningView: React.FC<UniversalLearningViewProps> = ({ mo
             </button>
           </div>
         </div>
-      </div>
+          </div>
+        </>
+      )}
     </section>
   );
 };
