@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { generateQuestions } from '../../../core/training/question-generator';
 import { worldCountries } from '../data.generated';
-import { worldCountriesModule } from '../module';
+import { worldCountriesTestModule } from '../../../test/module-fixtures';
 
 describe('world countries module', () => {
   it('contains 195 unique countries with local asset paths', () => {
@@ -28,8 +28,8 @@ describe('world countries module', () => {
   });
 
   it('generates four unique choices for every training mode', () => {
-    for (const mode of worldCountriesModule.trainingModes) {
-      const questions = generateQuestions(worldCountriesModule, {
+    for (const mode of worldCountriesTestModule.trainingModes) {
+      const questions = generateQuestions(worldCountriesTestModule, {
         modeId: mode.id,
         groupId: 'popular',
         questionCount: 10,
@@ -45,7 +45,7 @@ describe('world countries module', () => {
   });
 
   it('keeps continent questions usable in a single-continent group', () => {
-    const questions = generateQuestions(worldCountriesModule, {
+    const questions = generateQuestions(worldCountriesTestModule, {
       modeId: 'country-to-continent',
       groupId: 'châu-á',
       questionCount: 10,

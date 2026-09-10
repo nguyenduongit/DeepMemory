@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { generateQuestions } from '../../../core/training/question-generator';
 import { chemicalElements } from '../data';
-import { periodicTableModule } from '../module';
+import { periodicTableTestModule } from '../../../test/module-fixtures';
 
 describe('periodic table module', () => {
   it('contains all 118 elements with unique atomic numbers, symbols and IDs', () => {
@@ -14,8 +14,8 @@ describe('periodic table module', () => {
   });
 
   it('generates four unique answers for every training mode', () => {
-    for (const mode of periodicTableModule.trainingModes) {
-      const questions = generateQuestions(periodicTableModule, {
+    for (const mode of periodicTableTestModule.trainingModes) {
+      const questions = generateQuestions(periodicTableTestModule, {
         modeId: mode.id,
         groupId: 'first-20',
         questionCount: 10,
@@ -31,7 +31,7 @@ describe('periodic table module', () => {
   });
 
   it('keeps category training usable inside a single-category group', () => {
-    const questions = generateQuestions(periodicTableModule, {
+    const questions = generateQuestions(periodicTableTestModule, {
       modeId: 'symbol-to-category',
       groupId: 'noble-gases',
       questionCount: 'all',

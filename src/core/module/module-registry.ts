@@ -5,7 +5,6 @@ import { worldCountriesModule } from '../../modules/world-countries';
 import { solarSystemModule } from '../../modules/science/placeholder';
 import { periodicTableModule } from '../../modules/periodic-table';
 import { englishVocabularyModule } from '../../modules/english-vocabulary';
-import { validateModuleRegistry } from './module-validator';
 
 export const moduleRegistry: ModuleDefinition[] = [
   // Trí nhớ
@@ -23,12 +22,6 @@ export const moduleRegistry: ModuleDefinition[] = [
   // Ngôn ngữ
   englishVocabularyModule,
 ];
-
-// Validate registry integrity on startup
-const validation = validateModuleRegistry(moduleRegistry);
-if (!validation.valid) {
-  console.warn('Module registry validation warnings:', validation.errors);
-}
 
 export function getModuleById(id: string): ModuleDefinition | undefined {
   return moduleRegistry.find((m) => m.id === id);

@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { generateQuestions } from '../question-generator';
-import { numbersModule } from '../../../modules/numbers';
+import { numbersTestModule } from '../../../test/module-fixtures';
 
 describe('Question Generator', () => {
   it('should generate 10 questions when questionCount is 10', () => {
-    const questions = generateQuestions(numbersModule, {
+    const questions = generateQuestions(numbersTestModule, {
       modeId: 'image-to-number',
       groupId: '00-09',
       questionCount: 10,
@@ -15,7 +15,7 @@ describe('Question Generator', () => {
   });
 
   it('should generate all questions for a group when questionCount is all', () => {
-    const questions = generateQuestions(numbersModule, {
+    const questions = generateQuestions(numbersTestModule, {
       modeId: 'image-to-number',
       groupId: '00-09',
       questionCount: 'all',
@@ -26,7 +26,7 @@ describe('Question Generator', () => {
   });
 
   it('should ensure every question has exactly 4 options with exactly 1 correct answer', () => {
-    const questions = generateQuestions(numbersModule, {
+    const questions = generateQuestions(numbersTestModule, {
       modeId: 'image-to-number',
       groupId: '00-99',
       questionCount: 20,
@@ -44,7 +44,7 @@ describe('Question Generator', () => {
   });
 
   it('should distribute correct answer across different option positions', () => {
-    const questions = generateQuestions(numbersModule, {
+    const questions = generateQuestions(numbersTestModule, {
       modeId: 'image-to-number',
       groupId: '00-99',
       questionCount: 50,

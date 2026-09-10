@@ -1,6 +1,4 @@
 import { ModuleDefinition } from '../../core/module/module-types';
-import { chemicalElements } from './data';
-import { periodicTableGroups } from './groups';
 import {
   atomicNumberToSymbolMode,
   nameToSymbolMode,
@@ -20,7 +18,7 @@ export const periodicTableModule: ModuleDefinition<ChemicalElementItem> = {
   icon: 'atom',
   colorTheme: '#14b8a6',
   status: 'available',
-  items: chemicalElements,
+  items: [],
   learning: {
     primary: (item) => ({ type: 'text', value: item.symbol }),
     title: (item) => item.vietnameseName,
@@ -38,5 +36,5 @@ export const periodicTableModule: ModuleDefinition<ChemicalElementItem> = {
     symbolToAtomicNumberMode,
     symbolToCategoryMode,
   ],
-  groups: periodicTableGroups,
+  groups: [],
 };

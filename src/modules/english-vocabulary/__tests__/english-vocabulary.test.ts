@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { generateQuestions } from '../../../core/training/question-generator';
 import { englishVocabulary } from '../data';
-import { englishVocabularyModule } from '../module';
+import { englishVocabularyTestModule } from '../../../test/module-fixtures';
 
 describe('English vocabulary module', () => {
   it('contains 100 complete and unique A1 words with reserved image paths', () => {
@@ -20,17 +20,17 @@ describe('English vocabulary module', () => {
   });
 
   it('provides ten topic groups of ten words and one complete group', () => {
-    expect(englishVocabularyModule.groups).toHaveLength(11);
-    for (const group of englishVocabularyModule.groups?.slice(0, 10) ?? []) {
+    expect(englishVocabularyTestModule.groups).toHaveLength(11);
+    for (const group of englishVocabularyTestModule.groups?.slice(0, 10) ?? []) {
       expect(englishVocabulary.filter(group.filter)).toHaveLength(10);
     }
-    const allGroup = englishVocabularyModule.groups?.find((group) => group.id === 'all');
+    const allGroup = englishVocabularyTestModule.groups?.find((group) => group.id === 'all');
     expect(allGroup && englishVocabulary.filter(allGroup.filter)).toHaveLength(100);
   });
 
   it('generates four unique choices for every training mode', () => {
-    for (const mode of englishVocabularyModule.trainingModes) {
-      const questions = generateQuestions(englishVocabularyModule, {
+    for (const mode of englishVocabularyTestModule.trainingModes) {
+      const questions = generateQuestions(englishVocabularyTestModule, {
         modeId: mode.id,
         groupId: 'all',
         questionCount: 20,

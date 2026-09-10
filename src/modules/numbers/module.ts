@@ -1,7 +1,5 @@
 import { ModuleDefinition } from '../../core/module/module-types';
 import { NumberMemoryItem } from './types';
-import { numberMemoryItems } from './data';
-import { numberGroups } from './groups';
 import { numberImageToNumberMode, numberNumberToImageMode } from './training-modes';
 
 export const numbersModule: ModuleDefinition<NumberMemoryItem> = {
@@ -13,7 +11,7 @@ export const numbersModule: ModuleDefinition<NumberMemoryItem> = {
   icon: 'hash',
   colorTheme: '#6366f1',
   status: 'available',
-  items: numberMemoryItems,
+  items: [],
   learning: {
     primary: (item) => ({
       type: 'image',
@@ -27,5 +25,5 @@ export const numbersModule: ModuleDefinition<NumberMemoryItem> = {
     numberImageToNumberMode,
     numberNumberToImageMode,
   ],
-  groups: numberGroups,
+  groups: [],
 };

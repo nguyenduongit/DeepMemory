@@ -1,6 +1,4 @@
 import { ModuleDefinition } from '../../core/module/module-types';
-import { englishVocabulary } from './data';
-import { englishVocabularyGroups } from './groups';
 import { englishVocabularyTrainingModes, partOfSpeechLabels } from './training-modes';
 import { EnglishVocabularyItem } from './types';
 
@@ -13,7 +11,7 @@ export const englishVocabularyModule: ModuleDefinition<EnglishVocabularyItem> = 
   icon: 'languages',
   colorTheme: '#ec4899',
   status: 'available',
-  items: englishVocabulary,
+  items: [],
   learning: {
     primary: (item) => ({ type: 'text', value: item.word }),
     title: (item) => item.vietnameseMeaning,
@@ -21,5 +19,5 @@ export const englishVocabularyModule: ModuleDefinition<EnglishVocabularyItem> = 
     detail: (item) => `${item.example} — ${item.exampleTranslation}`,
   },
   trainingModes: englishVocabularyTrainingModes,
-  groups: englishVocabularyGroups,
+  groups: [],
 };

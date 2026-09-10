@@ -1,6 +1,4 @@
 import { ModuleDefinition } from '../../core/module/module-types';
-import { worldCountries } from './data.generated';
-import { worldCountryGroups } from './groups';
 import { worldCountryTrainingModes } from './training-modes';
 import { WorldCountryItem } from './types';
 
@@ -18,7 +16,7 @@ export const worldCountriesModule: ModuleDefinition<WorldCountryItem> = {
   icon: 'globe',
   colorTheme: '#0ea5e9',
   status: 'available',
-  items: worldCountries,
+  items: [],
   learning: {
     primary: (item) => ({ type: 'image', src: item.flagUrl, alt: `Quốc kỳ ${item.vietnameseName}` }),
     title: learningTitle,
@@ -38,5 +36,5 @@ export const worldCountriesModule: ModuleDefinition<WorldCountryItem> = {
     ],
   },
   trainingModes: worldCountryTrainingModes,
-  groups: worldCountryGroups,
+  groups: [],
 };

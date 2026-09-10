@@ -1,17 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import { validateModule, validateModuleRegistry } from '../module-validator';
-import { numbersModule } from '../../../modules/numbers';
-import { moduleRegistry } from '../module-registry';
+import { hydratedModuleRegistry, numbersTestModule } from '../../../test/module-fixtures';
 
 describe('Module Validator (Section 73)', () => {
   it('should validate numbersModule successfully', () => {
-    const result = validateModule(numbersModule);
+    const result = validateModule(numbersTestModule);
     expect(result.valid).toBe(true);
     expect(result.errors).toHaveLength(0);
   });
 
   it('should validate all modules in moduleRegistry without duplicate IDs', () => {
-    const result = validateModuleRegistry(moduleRegistry);
+    const result = validateModuleRegistry(hydratedModuleRegistry);
     expect(result.valid).toBe(true);
     expect(result.errors).toHaveLength(0);
   });
