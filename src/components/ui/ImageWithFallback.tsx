@@ -18,7 +18,8 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   fallbackSubtitle,
   hideSubtitle = false,
 }) => {
-  const [hasError, setHasError] = useState(false);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const hasError = failedSrc === src;
 
   // If error loading or empty src, display beautiful placeholder card
   if (hasError || !src) {
@@ -50,7 +51,8 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
     <img
       src={src}
       alt={alt}
-      onError={() => setHasError(true)}
+      onError={() => setFailedSrc(src)}
+      onLoad={() => setFailedSrc((failed) => (failed === src ? null : failed))}
       className={`object-contain transition-opacity duration-150 ${className}`}
       loading="eager"
     />
