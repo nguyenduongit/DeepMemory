@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "generate:countries": "node scripts/generate-country-assets.mjs",
+    "upload:vocabulary-images": "node scripts/upload-vocabulary-images.mjs",
     "test": "vitest run",
     "preview": "vite preview"
   },

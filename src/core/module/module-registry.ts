@@ -4,7 +4,7 @@ import { memoryCardsModule, memoryPalaceModule } from '../../modules/memory/plac
 import { worldCountriesModule } from '../../modules/world-countries';
 import { solarSystemModule } from '../../modules/science/placeholder';
 import { periodicTableModule } from '../../modules/periodic-table';
-import { englishVocabModule } from '../../modules/language/placeholder';
+import { englishVocabularyModule } from '../../modules/english-vocabulary';
 import { validateModuleRegistry } from './module-validator';
 
 export const moduleRegistry: ModuleDefinition[] = [
@@ -21,7 +21,7 @@ export const moduleRegistry: ModuleDefinition[] = [
   solarSystemModule,
 
   // Ngôn ngữ
-  englishVocabModule,
+  englishVocabularyModule,
 ];
 
 // Validate registry integrity on startup
