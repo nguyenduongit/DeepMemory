@@ -25,6 +25,9 @@ export const UniversalLearningView: React.FC<UniversalLearningViewProps> = ({ mo
   const [viewMode, setViewMode] = useState<'overview' | 'cards'>(
     module?.learning.overview ? 'overview' : 'cards',
   );
+  const [selectedVariantId, setSelectedVariantId] = useState(
+    module?.learning.variants?.[0]?.id || '',
+  );
 
   const selectedGroup = module?.groups?.find((g) => g.id === selectedGroupId);
   const items = filterItemsByGroup(module?.items || [], selectedGroup);
@@ -65,10 +68,13 @@ export const UniversalLearningView: React.FC<UniversalLearningViewProps> = ({ mo
     );
   }
 
-  const primaryContent = module.learning.primary(currentItem);
-  const title = module.learning.title(currentItem);
-  const subtitle = module.learning.subtitle ? module.learning.subtitle(currentItem) : undefined;
-  const detail = module.learning.detail ? module.learning.detail(currentItem) : undefined;
+  const activeVariant = module.learning.variants?.find(
+    (variant) => variant.id === selectedVariantId,
+  );
+  const primaryContent = activeVariant?.primary(currentItem) ?? module.learning.primary(currentItem);
+  const title = activeVariant?.title?.(currentItem) ?? module.learning.title(currentItem);
+  const subtitle = activeVariant?.subtitle?.(currentItem) ?? module.learning.subtitle?.(currentItem);
+  const detail = activeVariant?.detail?.(currentItem) ?? module.learning.detail?.(currentItem);
   const progressPercent = totalCount > 0 ? ((currentIndex + 1) / totalCount) * 100 : 0;
   const Overview = module.learning.overview;
 
@@ -132,6 +138,23 @@ export const UniversalLearningView: React.FC<UniversalLearningViewProps> = ({ mo
         </div>
       )}
 
+      {module.learning.variants && module.learning.variants.length > 1 && (
+        <div className="flex-none flex justify-center py-2 border-b border-slate-800/70 bg-slate-950/80">
+          <div className="inline-flex rounded-xl bg-slate-900 border border-slate-800 p-1">
+            {module.learning.variants.map((variant) => (
+              <button
+                key={variant.id}
+                type="button"
+                onClick={() => setSelectedVariantId(variant.id)}
+                className={`rounded-lg px-4 py-1.5 text-xs font-bold transition-colors ${selectedVariantId === variant.id ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
+              >
+                {variant.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {Overview && viewMode === 'overview' ? (
         <div className="flex-1 min-h-0 overflow-hidden">
           <Overview items={module.items} onSelectItem={handleSelectOverviewItem} />
@@ -153,43 +176,43 @@ export const UniversalLearningView: React.FC<UniversalLearningViewProps> = ({ mo
             </div>
           </div>
 
-      <div className="flex-none w-full bg-slate-950/90 backdrop-blur-md border-t border-slate-800/80 px-4 sm:px-6 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-        <div className="max-w-md mx-auto space-y-2">
-          <ProgressBar progress={progressPercent} size="sm" variant="primary" />
+          <div className="flex-none w-full bg-slate-950/90 backdrop-blur-md border-t border-slate-800/80 px-4 sm:px-6 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <div className="max-w-md mx-auto space-y-2">
+              <ProgressBar progress={progressPercent} size="sm" variant="primary" />
 
-          <div className="flex items-center justify-between gap-3">
-            <button
-              onClick={handlePrev}
-              className="flex-1 min-w-0 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-slate-200 font-bold text-sm border border-slate-800 flex items-center justify-center gap-1.5 active:scale-98 transition-all"
-            >
-              <ChevronLeft className="w-4 h-4 shrink-0" /> <span>Trước (←)</span>
-            </button>
+              <div className="flex items-center justify-between gap-3">
+                <button
+                  onClick={handlePrev}
+                  className="flex-1 min-w-0 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-slate-200 font-bold text-sm border border-slate-800 flex items-center justify-center gap-1.5 active:scale-98 transition-all"
+                >
+                  <ChevronLeft className="w-4 h-4 shrink-0" /> <span>Trước (←)</span>
+                </button>
 
-            <div className="shrink-0 flex items-center gap-1 font-mono text-xs font-semibold text-slate-400">
-              <input
-                type="number"
-                aria-label="Nhập số thứ tự"
-                min={1}
-                max={totalCount}
-                value={currentIndex + 1}
-                onChange={(e) => {
-                  const val = parseInt(e.target.value, 10);
-                  if (!isNaN(val)) setCurrentIndex(clampIndex(val - 1, totalCount));
-                }}
-                className="w-12 text-center bg-slate-900 border border-slate-700/80 rounded-lg py-1.5 text-white font-mono font-bold focus:outline-none focus:ring-1 focus:ring-indigo-500"
-              />
-              <span className="text-slate-600">/</span>
-              <span>{totalCount}</span>
+                <div className="shrink-0 flex items-center gap-1 font-mono text-xs font-semibold text-slate-400">
+                  <input
+                    type="number"
+                    aria-label="Nhập số thứ tự"
+                    min={1}
+                    max={totalCount}
+                    value={currentIndex + 1}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value, 10);
+                      if (!isNaN(val)) setCurrentIndex(clampIndex(val - 1, totalCount));
+                    }}
+                    className="w-12 text-center bg-slate-900 border border-slate-700/80 rounded-lg py-1.5 text-white font-mono font-bold focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  />
+                  <span className="text-slate-600">/</span>
+                  <span>{totalCount}</span>
+                </div>
+
+                <button
+                  onClick={handleNext}
+                  className="flex-1 min-w-0 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold text-sm shadow-md shadow-indigo-600/25 flex items-center justify-center gap-1.5 active:scale-98 transition-all"
+                >
+                  <span>Tiếp (→)</span> <ChevronRight className="w-4 h-4 shrink-0" />
+                </button>
+              </div>
             </div>
-
-            <button
-              onClick={handleNext}
-              className="flex-1 min-w-0 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold text-sm shadow-md shadow-indigo-600/25 flex items-center justify-center gap-1.5 active:scale-98 transition-all"
-            >
-              <span>Tiếp (→)</span> <ChevronRight className="w-4 h-4 shrink-0" />
-            </button>
-          </div>
-        </div>
           </div>
         </>
       )}

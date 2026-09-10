@@ -1,7 +1,7 @@
 import { ModuleDefinition, ModuleCategory } from './module-types';
 import { numbersModule } from '../../modules/numbers';
 import { memoryCardsModule, memoryPalaceModule } from '../../modules/memory/placeholder';
-import { flagsModule, mapsModule, capitalsModule, countriesModule } from '../../modules/geography/placeholder';
+import { worldCountriesModule } from '../../modules/world-countries';
 import { solarSystemModule } from '../../modules/science/placeholder';
 import { periodicTableModule } from '../../modules/periodic-table';
 import { englishVocabModule } from '../../modules/language/placeholder';
@@ -14,10 +14,7 @@ export const moduleRegistry: ModuleDefinition[] = [
   memoryPalaceModule,
 
   // Địa lý
-  flagsModule,
-  mapsModule,
-  capitalsModule,
-  countriesModule,
+  worldCountriesModule,
 
   // Khoa học
   periodicTableModule,

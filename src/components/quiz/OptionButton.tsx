@@ -16,6 +16,11 @@ export const OptionButton: React.FC<OptionButtonProps> = ({
   disabled = false,
 }) => {
   const shortcutKey = (index + 1).toString();
+  const textSize = content.type === 'text' && content.value.length > 24
+    ? 'text-sm sm:text-base'
+    : content.type === 'text' && content.value.length > 16
+      ? 'text-base sm:text-xl'
+      : 'text-2xl sm:text-3xl';
 
   return (
     <button
@@ -32,7 +37,7 @@ export const OptionButton: React.FC<OptionButtonProps> = ({
 
       {/* Answer content: Text or Image */}
       {content.type === 'text' ? (
-        <span className="font-display font-black text-2xl sm:text-3xl text-white tracking-tight group-hover:text-indigo-200">
+        <span className={`font-display font-black text-white tracking-tight group-hover:text-indigo-200 ${textSize}`}>
           {content.value}
         </span>
       ) : (

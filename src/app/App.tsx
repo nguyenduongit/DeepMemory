@@ -36,7 +36,7 @@ export const App: React.FC = () => {
       case 'module-home':
         return <ModuleHomeView moduleId={currentRoute.moduleId} />;
       case 'learning':
-        return <UniversalLearningView moduleId={currentRoute.moduleId} />;
+        return <UniversalLearningView key={currentRoute.moduleId} moduleId={currentRoute.moduleId} />;
       case 'training-setup':
         return <TrainingSetupView moduleId={currentRoute.moduleId} />;
       case 'training-session':

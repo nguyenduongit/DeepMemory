@@ -25,6 +25,11 @@ export const LearningCard: React.FC<LearningCardProps> = ({
   onPrev,
 }) => {
   const touchStartX = useRef<number | null>(null);
+  const titleSize = title.length > 22
+    ? 'text-2xl sm:text-3xl'
+    : title.length > 14
+      ? 'text-3xl sm:text-4xl'
+      : 'text-5xl sm:text-6xl';
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -71,7 +76,7 @@ export const LearningCard: React.FC<LearningCardProps> = ({
 
         {/* Title and Subtitle */}
         <div className="flex flex-col items-center text-center mt-4">
-          <span className="font-display font-black text-5xl sm:text-6xl text-white tracking-tight">
+          <span className={`font-display font-black text-white tracking-tight ${titleSize}`}>
             {title}
           </span>
           {subtitle && (

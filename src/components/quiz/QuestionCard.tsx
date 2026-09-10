@@ -15,13 +15,19 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   fallbackTitle,
   fallbackSubtitle,
 }) => {
+  const textSize = question.type === 'text' && question.value.length > 24
+    ? 'text-3xl sm:text-4xl'
+    : question.type === 'text' && question.value.length > 14
+      ? 'text-4xl sm:text-5xl'
+      : 'text-6xl sm:text-7xl';
+
   return (
     <div
       className={`w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 flex flex-col items-center justify-center min-h-[220px] sm:min-h-[260px] shadow-xl shadow-slate-950/50 ${className}`}
     >
       {question.type === 'text' ? (
         <div className="flex flex-col items-center justify-center text-center">
-          <span className="font-display font-black text-6xl sm:text-7xl tracking-tight text-white select-none drop-shadow-sm">
+          <span className={`font-display font-black tracking-tight text-white select-none drop-shadow-sm ${textSize}`}>
             {question.value}
           </span>
         </div>
