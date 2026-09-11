@@ -18,24 +18,22 @@ import { formatDuration } from '../../core/training/timer';
 import { SessionAnswer, TrainingSession } from '../../core/training/training-types';
 import { useAppStore } from '../../stores/useAppStore';
 import { useProgressStore } from '../../stores/useProgressStore';
+import { NumberMemoryItem } from '../numbers/types';
 import {
   generateDigitSequence,
   sanitizeDigitInput,
   scoreDigitRecall,
-  splitDigitSequence,
 } from './engine';
 import {
-  DigitItem,
   NUMBER_SEQUENCE_LENGTHS,
-  NumberSequenceChunkSize,
   NumberSequenceLength,
   NumberSequenceResult,
   NumberSequenceScreen,
 } from './types';
 
-const MODULE_ID = 'memory-number-sequence';
-const MODE_ID = 'number-recall';
-const EMPTY_DIGITS: DigitItem[] = [];
+const MODULE_ID = 'numbers-00-99';
+const MODE_ID = 'number-sequence';
+const EMPTY_NUMBER_ITEMS: NumberMemoryItem[] = [];
 
 function sequenceGroupId(length: number): string {
   return `${length}-digits`;
@@ -54,19 +52,11 @@ function ElapsedTimer({ startedAt }: { startedAt: number }) {
   return <>{formatDuration(elapsedMs)}</>;
 }
 
-function SequenceGrid({ sequence, chunkSize }: { sequence: string; chunkSize: NumberSequenceChunkSize }) {
-  const chunks = splitDigitSequence(sequence, chunkSize);
+function ContinuousSequence({ sequence }: { sequence: string }) {
   return (
-    <div className={`grid gap-2 ${chunkSize === 2 ? 'grid-cols-5 sm:grid-cols-10' : 'grid-cols-4 sm:grid-cols-8'}`}>
-      {chunks.map((chunk, index) => (
-        <span
-          key={`${index}-${chunk}`}
-          className="rounded-xl border border-slate-800 bg-slate-950/80 px-1 py-2 text-center font-mono text-xl font-black tracking-[0.08em] text-white sm:text-2xl"
-        >
-          {chunk}
-        </span>
-      ))}
-    </div>
+    <p className="break-all font-mono text-2xl font-black leading-relaxed tracking-normal text-white sm:text-3xl">
+      {sequence}
+    </p>
   );
 }
 
@@ -82,7 +72,7 @@ function ComparisonRow({
   return (
     <div className="grid grid-cols-[3.5rem_minmax(0,1fr)] gap-2">
       <span className="pt-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">{label}</span>
-      <div className="flex flex-wrap gap-x-0.5 gap-y-1 font-mono text-sm font-bold leading-relaxed">
+      <div className="flex flex-wrap font-mono text-sm font-bold leading-relaxed">
         {Array.from(value).map((digit, index) => {
           const isWrong = expected !== undefined && digit !== expected[index];
           return (
@@ -98,12 +88,11 @@ function ComparisonRow({
 
 export const NumberSequenceView: React.FC = () => {
   const module = getModuleById(MODULE_ID);
-  const digits = (module?.items ?? EMPTY_DIGITS) as DigitItem[];
+  const numberItems = (module?.items ?? EMPTY_NUMBER_ITEMS) as NumberMemoryItem[];
   const { goBack } = useAppStore();
   const { bestTimesMap, loadModuleProgress, recordSessionCompletion } = useProgressStore();
   const [screen, setScreen] = useState<NumberSequenceScreen>('home');
   const [length, setLength] = useState<NumberSequenceLength>(20);
-  const [chunkSize, setChunkSize] = useState<NumberSequenceChunkSize>(2);
   const [sequence, setSequence] = useState('');
   const [recalled, setRecalled] = useState('');
   const [startedAt, setStartedAt] = useState(0);
@@ -122,7 +111,7 @@ export const NumberSequenceView: React.FC = () => {
   }, [screen]);
 
   const title = screen === 'home'
-    ? module?.name
+    ? 'Thi đấu nhớ số'
     : screen === 'memorize'
       ? 'Ghi nhớ dãy số'
       : screen === 'recall'
@@ -167,17 +156,22 @@ export const NumberSequenceView: React.FC = () => {
       durationMs: memoryDuration,
       completedAt,
     };
-    const answers: SessionAnswer[] = Array.from(sequence).map((digit, index) => ({
-      questionId: `digit-${index}`,
-      itemId: `digit-${digit}`,
-      selectedOptionId: recalled[index] ?? '',
-      correctOptionId: digit,
-      isCorrect: recalled[index] === digit,
-      reactionMs: 0,
-    }));
+    const answers: SessionAnswer[] = Array.from({ length: sequence.length / 2 }, (_, pairIndex) => {
+      const startIndex = pairIndex * 2;
+      const expectedPair = sequence.slice(startIndex, startIndex + 2);
+      const recalledPair = recalled.slice(startIndex, startIndex + 2);
+      return {
+        questionId: `pair-${pairIndex}`,
+        itemId: expectedPair,
+        selectedOptionId: recalledPair,
+        correctOptionId: expectedPair,
+        isCorrect: recalledPair === expectedPair,
+        reactionMs: 0,
+      };
+    });
 
     try {
-      const saved = await recordSessionCompletion(session, answers, digits.length);
+      const saved = await recordSessionCompletion(session, answers, numberItems.length);
       setIsNewBestTime(saved.isNewBestTime);
     } finally {
       setIsSaving(false);
@@ -189,7 +183,7 @@ export const NumberSequenceView: React.FC = () => {
     else setScreen('home');
   };
 
-  if (!module || digits.length !== 10) {
+  if (!module || numberItems.length !== 100) {
     return <div className="grid h-full place-items-center px-6 text-center text-slate-400">Dữ liệu thi đấu nhớ số chưa đầy đủ.</div>;
   }
 
@@ -249,23 +243,6 @@ export const NumberSequenceView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-5">
-                <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.16em] text-indigo-400">Cách hiển thị</p>
-                <div className="grid grid-cols-2 gap-3">
-                  {([2, 4] as const).map((value) => (
-                    <button
-                      key={value}
-                      type="button"
-                      onClick={() => setChunkSize(value)}
-                      className={`rounded-2xl border py-3 font-mono text-sm font-black ${chunkSize === value ? 'border-indigo-400 bg-indigo-600 text-white' : 'border-slate-800 bg-slate-950 text-slate-400'}`}
-                    >
-                      {value === 2 ? '12 34 56' : '1234 5678'}
-                    </button>
-                  ))}
-                </div>
-                <p className="mt-3 text-xs leading-relaxed text-slate-500">Chia 2 số phù hợp trực tiếp với hệ hình 00–99. Chia 4 số giúp đọc nhanh hai hình liên tiếp.</p>
-              </div>
-
               <Button size="lg" fullWidth className="min-h-16 bg-cyan-600 hover:bg-cyan-500" onClick={startChallenge} leftIcon={<Play className="h-5 w-5 fill-white" />}>
                 BẮT ĐẦU THỬ THÁCH {length} SỐ
               </Button>
@@ -279,7 +256,7 @@ export const NumberSequenceView: React.FC = () => {
                 <span className="flex items-center gap-2 font-mono text-lg font-black text-cyan-300"><Clock3 className="h-4 w-4" /> <ElapsedTimer startedAt={startedAt} /></span>
               </div>
               <div className="min-h-0 flex-1 rounded-3xl border border-slate-800 bg-slate-900/80 p-4 sm:p-5">
-                <SequenceGrid sequence={sequence} chunkSize={chunkSize} />
+                <ContinuousSequence sequence={sequence} />
               </div>
               <Button size="lg" fullWidth className="min-h-14" onClick={beginRecall} leftIcon={<Eye className="h-5 w-5" />}>
                 TÔI ĐÃ NHỚ XONG
@@ -307,7 +284,7 @@ export const NumberSequenceView: React.FC = () => {
                   spellCheck={false}
                   aria-label="Nhập dãy số đã ghi nhớ"
                   onChange={(event) => setRecalled(sanitizeDigitInput(event.target.value, length))}
-                  className="h-56 w-full resize-none rounded-2xl border border-slate-700 bg-slate-950 p-4 font-mono text-2xl font-black leading-relaxed tracking-[0.16em] text-white outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                  className="h-56 w-full resize-none rounded-2xl border border-slate-700 bg-slate-950 p-4 font-mono text-2xl font-black leading-relaxed tracking-normal text-white outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                   placeholder="Nhập dãy số…"
                 />
               </div>

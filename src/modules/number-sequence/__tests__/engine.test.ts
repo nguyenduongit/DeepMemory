@@ -3,7 +3,6 @@ import {
   generateDigitSequence,
   sanitizeDigitInput,
   scoreDigitRecall,
-  splitDigitSequence,
 } from '../engine';
 
 describe('number sequence engine', () => {
@@ -16,11 +15,6 @@ describe('number sequence engine', () => {
 
   it('keeps only digits and respects the challenge length', () => {
     expect(sanitizeDigitInput('12 3a-456', 5)).toBe('12345');
-  });
-
-  it('splits a sequence without losing trailing digits', () => {
-    expect(splitDigitSequence('1234567', 2)).toEqual(['12', '34', '56', '7']);
-    expect(splitDigitSequence('1234567', 4)).toEqual(['1234', '567']);
   });
 
   it('scores positions, first error, longest streak and accuracy', () => {

@@ -11,7 +11,6 @@ import {
   Club,
   Castle,
   Brain,
-  Timer,
   HelpCircle,
 } from 'lucide-react';
 
@@ -45,8 +44,6 @@ export const IconRenderer: React.FC<IconRendererProps> = ({ name, className = 'w
       return <Castle className={className} />;
     case 'brain':
       return <Brain className={className} />;
-    case 'timer':
-      return <Timer className={className} />;
     default:
       return <HelpCircle className={className} />;
   }

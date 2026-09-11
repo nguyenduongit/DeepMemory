@@ -12,15 +12,6 @@ export function sanitizeDigitInput(value: string, maxLength: number): string {
   return value.replace(/\D/g, '').slice(0, Math.max(0, maxLength));
 }
 
-export function splitDigitSequence(sequence: string, chunkSize: number): string[] {
-  if (!Number.isInteger(chunkSize) || chunkSize <= 0) return [sequence];
-  const chunks: string[] = [];
-  for (let index = 0; index < sequence.length; index += chunkSize) {
-    chunks.push(sequence.slice(index, index + chunkSize));
-  }
-  return chunks;
-}
-
 export function scoreDigitRecall(
   expected: string,
   recalled: string,

@@ -33,6 +33,6 @@ export function generateBestTimeKey(
 export function requiresPerfectAccuracyForRecord(moduleId: string, modeId: string): boolean {
   return (
     (moduleId === 'memory-cards' && modeId === 'deck-order') ||
-    (moduleId === 'memory-number-sequence' && modeId === 'number-recall')
+    (moduleId === 'numbers-00-99' && modeId === 'number-sequence')
   );
 }

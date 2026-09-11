@@ -3,6 +3,7 @@ import { create } from 'zustand';
 export type AppRoute =
   | { name: 'launchpad' }
   | { name: 'module-home'; moduleId: string }
+  | { name: 'number-sequence' }
   | { name: 'learning'; moduleId: string }
   | { name: 'training-setup'; moduleId: string }
   | { name: 'training-session'; moduleId: string }

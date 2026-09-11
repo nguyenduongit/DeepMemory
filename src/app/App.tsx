@@ -95,8 +95,9 @@ export const App: React.FC = () => {
         );
       case 'module-home':
         if (currentRoute.moduleId === 'memory-cards') return <MemoryCardsView />;
-        if (currentRoute.moduleId === 'memory-number-sequence') return <NumberSequenceView />;
         return <ModuleHomeView moduleId={currentRoute.moduleId} />;
+      case 'number-sequence':
+        return <NumberSequenceView />;
       case 'learning':
         return <UniversalLearningView key={currentRoute.moduleId} moduleId={currentRoute.moduleId} />;
       case 'training-setup':

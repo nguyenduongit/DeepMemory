@@ -7,7 +7,7 @@ import { Header } from '../../components/layout/Header';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { Button } from '../../components/ui/Button';
 import { formatDuration, formatReactionSpeed } from '../../core/training/timer';
-import { BookOpen, Play, Trophy, History, Clock } from 'lucide-react';
+import { BookOpen, Play, Trophy, History, Clock, Timer } from 'lucide-react';
 
 interface ModuleHomeViewProps {
   moduleId: string;
@@ -69,9 +69,12 @@ export const ModuleHomeView: React.FC<ModuleHomeViewProps> = ({ moduleId }) => {
             {module.description && <p className="text-xs sm:text-sm text-slate-400 mt-4 leading-relaxed">{module.description}</p>}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className={`grid grid-cols-1 gap-4 ${moduleId === 'numbers-00-99' ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
             <Button size="lg" variant="secondary" leftIcon={<BookOpen className="w-5 h-5 text-indigo-400" />} onClick={() => navigate({ name: 'learning', moduleId })} className="h-16 text-base">HỌC TẬP</Button>
             <Button size="lg" variant="primary" leftIcon={<Play className="w-5 h-5 fill-white" />} onClick={() => navigate({ name: 'training-setup', moduleId })} className="h-16 text-base">LUYỆN TẬP</Button>
+            {moduleId === 'numbers-00-99' ? (
+              <Button size="lg" variant="outline" leftIcon={<Timer className="w-5 h-5 text-cyan-400" />} onClick={() => navigate({ name: 'number-sequence' })} className="h-16 text-base sm:col-span-3 lg:col-span-1">THI ĐẤU</Button>
+            ) : null}
           </div>
 
           <div className="bg-slate-900/60 border border-slate-800/80 rounded-3xl p-5 sm:p-6 space-y-4">

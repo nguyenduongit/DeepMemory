@@ -34,7 +34,7 @@ describe('Scoring & Best Time Rules (Section 70, 71, 72)', () => {
 
   it('requires perfect recall for ordered card and number sequence records', () => {
     expect(requiresPerfectAccuracyForRecord('memory-cards', 'deck-order')).toBe(true);
-    expect(requiresPerfectAccuracyForRecord('memory-number-sequence', 'number-recall')).toBe(true);
+    expect(requiresPerfectAccuracyForRecord('numbers-00-99', 'number-sequence')).toBe(true);
     expect(requiresPerfectAccuracyForRecord('numbers-00-99', 'image-to-number')).toBe(false);
   });
 });
