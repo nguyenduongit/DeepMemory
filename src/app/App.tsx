@@ -13,6 +13,7 @@ import { TrainingSessionView } from '../features/training-session/TrainingSessio
 import { ResultView } from '../features/results/ResultView';
 import { StatisticsView } from '../features/statistics/StatisticsView';
 import { SettingsView } from '../features/settings/SettingsView';
+import { MemoryCardsView } from '../modules/memory-cards/MemoryCardsView';
 import { loadModulesFromSupabase } from '../core/module/module-loader';
 import { Database, RefreshCw, WifiOff } from 'lucide-react';
 
@@ -92,7 +93,9 @@ export const App: React.FC = () => {
           </>
         );
       case 'module-home':
-        return <ModuleHomeView moduleId={currentRoute.moduleId} />;
+        return currentRoute.moduleId === 'memory-cards'
+          ? <MemoryCardsView />
+          : <ModuleHomeView moduleId={currentRoute.moduleId} />;
       case 'learning':
         return <UniversalLearningView key={currentRoute.moduleId} moduleId={currentRoute.moduleId} />;
       case 'training-setup':

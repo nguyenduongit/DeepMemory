@@ -24,3 +24,8 @@ Made with Natural Earth.
 
 Country names are localized with `i18n-iso-countries` (MIT License), and country
 metadata is provided by `countries-list` (MIT License).
+## Playing cards
+
+The 52 SVG playing-card faces in `public/playing-cards` are derived from
+“English pattern playing cards deck PLUS CC0.svg” on Wikimedia Commons and
+are dedicated to the public domain under CC0 1.0.

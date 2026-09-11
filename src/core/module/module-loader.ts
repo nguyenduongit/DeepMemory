@@ -92,6 +92,18 @@ function mapItem(row: ItemRow): Record<string, unknown> {
         topicId: row.group_id ?? attributes.topicId,
         imageUrl: row.image_url ?? undefined,
       };
+    case 'memory-cards':
+      return {
+        ...common,
+        code: row.code ?? '',
+        name: row.name,
+        imageUrl: row.image_url ?? '',
+        suit: attributes.suit,
+        rank: attributes.rank,
+        mnemonicNumber: attributes.mnemonicNumber,
+        mnemonicName: attributes.mnemonicName,
+        mnemonicImageUrl: attributes.mnemonicImageUrl,
+      };
     default:
       return common;
   }
