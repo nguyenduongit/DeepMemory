@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowLeft, BookOpen, Brain, Check, ChevronLeft, ChevronRight, Eye, Play, RotateCcw, Trophy, Undo2, Zap } from 'lucide-react';
+import { ArrowDown, ArrowLeft, BookOpen, Brain, Check, ChevronLeft, ChevronRight, Eye, Play, RotateCcw, Trophy, Undo2, Zap } from 'lucide-react';
 import { Header } from '../../components/layout/Header';
 import { Button } from '../../components/ui/Button';
 import { getModuleById } from '../../core/module/module-registry';
@@ -23,18 +23,39 @@ function CardFace({ card, compact = false }: { card: MemoryCardItem; compact?: b
       src={card.imageUrl}
       alt={card.name}
       draggable={false}
-      className={`block rounded-lg bg-white object-contain shadow-lg shadow-black/25 ${compact ? 'h-20 w-14' : 'h-[min(42vh,20rem)] w-auto max-w-full'}`}
+      className={`block object-contain drop-shadow-[0_14px_18px_rgba(0,0,0,0.32)] ${compact ? 'h-20 w-14' : 'h-[min(31vh,16rem)] w-auto max-w-full sm:h-[19rem]'}`}
     />
   );
 }
 
 function Mnemonic({ card, compact = false }: { card: MemoryCardItem; compact?: boolean }) {
   return (
-    <div className={`overflow-hidden rounded-2xl border border-indigo-500/25 bg-slate-900 ${compact ? 'p-2' : 'p-4'}`}>
-      <img src={card.mnemonicImageUrl} alt={card.mnemonicName} className={`mx-auto rounded-xl object-cover ${compact ? 'h-16 w-16' : 'h-36 w-36'}`} />
-      <div className="mt-2 text-center">
-        <strong className="font-mono text-indigo-300">{card.mnemonicNumber}</strong>
-        <span className="ml-2 text-sm font-bold text-white">{card.mnemonicName}</span>
+    <div className={`min-w-0 overflow-hidden border border-indigo-500/30 bg-indigo-500/10 ${compact ? 'rounded-2xl p-2' : 'flex w-full items-center gap-4 rounded-3xl p-3.5 sm:block sm:max-w-52 sm:p-4'}`}>
+      <img src={card.mnemonicImageUrl} alt={card.mnemonicName} className={`shrink-0 rounded-2xl object-cover ring-1 ring-white/10 ${compact ? 'mx-auto h-16 w-16' : 'h-24 w-24 sm:mx-auto sm:h-36 sm:w-36'}`} />
+      <div className={`${compact ? 'mt-2 text-center' : 'min-w-0 text-left sm:mt-3 sm:text-center'}`}>
+        {!compact ? <span className="mb-1 block text-[10px] font-bold uppercase tracking-[0.18em] text-indigo-400">Hình liên tưởng</span> : null}
+        <strong className={`${compact ? 'font-mono text-indigo-300' : 'block font-mono text-2xl font-black text-indigo-300'}`}>{card.mnemonicNumber}</strong>
+        <span className={`${compact ? 'ml-2 text-sm' : 'mt-0.5 block truncate text-base'} font-bold text-white`}>{card.mnemonicName}</span>
+      </div>
+    </div>
+  );
+}
+
+function MemoryPair({ card }: { card: MemoryCardItem }) {
+  return (
+    <div className="relative overflow-hidden rounded-[2rem] border border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950 p-4 shadow-2xl shadow-black/20 sm:p-6">
+      <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-indigo-600/10 blur-3xl" />
+      <div className="relative grid min-w-0 grid-cols-1 items-center justify-items-center gap-3 sm:grid-cols-[minmax(0,1fr)_3rem_minmax(0,1fr)] sm:gap-5">
+        <div className="flex min-w-0 flex-col items-center">
+          <span className="mb-2 rounded-full border border-slate-700 bg-slate-800/80 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-slate-300">{card.name}</span>
+          <CardFace card={card} />
+        </div>
+        <div className="flex items-center justify-center text-indigo-400/70 sm:rotate-[-90deg]">
+          <div className="h-px w-10 bg-gradient-to-r from-transparent to-indigo-500/50" />
+          <ArrowDown className="h-5 w-5 shrink-0" />
+          <div className="h-px w-10 bg-gradient-to-l from-transparent to-indigo-500/50" />
+        </div>
+        <Mnemonic card={card} />
       </div>
     </div>
   );
@@ -177,15 +198,11 @@ export const MemoryCardsView: React.FC = () => {
 
           {screen === 'mapping' && (
             <>
-              <div className="flex items-center justify-center gap-5 rounded-3xl border border-slate-800 bg-slate-900 p-5">
-                <CardFace card={cards[mappingIndex]} />
-                <div className="text-2xl text-slate-600">→</div>
-                <Mnemonic card={cards[mappingIndex]} />
-              </div>
-              <div className="flex items-center justify-between gap-3">
-                <Button variant="secondary" onClick={() => setMappingIndex((index) => Math.max(0, index - 1))} disabled={mappingIndex === 0} leftIcon={<ChevronLeft className="h-4 w-4" />}>Trước</Button>
-                <span className="font-mono text-sm text-slate-400">{mappingIndex + 1} / 52</span>
-                <Button onClick={() => setMappingIndex((index) => Math.min(51, index + 1))} disabled={mappingIndex === 51} rightIcon={<ChevronRight className="h-4 w-4" />}>Tiếp</Button>
+              <MemoryPair card={cards[mappingIndex]} />
+              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+                <Button className="min-h-12" variant="secondary" onClick={() => setMappingIndex((index) => Math.max(0, index - 1))} disabled={mappingIndex === 0} leftIcon={<ChevronLeft className="h-4 w-4" />}>Trước</Button>
+                <span className="min-w-16 text-center font-mono text-sm font-bold text-slate-400"><strong className="text-white">{mappingIndex + 1}</strong> / 52</span>
+                <Button className="min-h-12" onClick={() => setMappingIndex((index) => Math.min(51, index + 1))} disabled={mappingIndex === 51} rightIcon={<ChevronRight className="h-4 w-4" />}>Tiếp</Button>
               </div>
             </>
           )}
@@ -205,8 +222,8 @@ export const MemoryCardsView: React.FC = () => {
 
           {screen === 'memorize' && sequence[memoryIndex] && (
             <>
-              <div className="flex items-center justify-between text-xs font-bold text-slate-400"><span>LÁ {memoryIndex + 1} / {sequence.length}</span><span>Ghép 2–3 hình thành một câu chuyện</span></div>
-              <div className="flex items-center justify-center gap-4 rounded-3xl border border-slate-800 bg-slate-900 p-5"><CardFace card={sequence[memoryIndex]} /><Mnemonic card={sequence[memoryIndex]} /></div>
+              <div className="flex items-center justify-between gap-3 text-xs font-bold text-slate-400"><span>LÁ {memoryIndex + 1} / {sequence.length}</span><span className="truncate text-right">Ghép 2–3 hình thành câu chuyện</span></div>
+              <MemoryPair card={sequence[memoryIndex]} />
               <div className="flex gap-3"><Button variant="secondary" className="flex-1" disabled={memoryIndex === 0} onClick={() => setMemoryIndex((index) => index - 1)} leftIcon={<ChevronLeft className="h-4 w-4" />}>Trước</Button><Button className="flex-1" disabled={memoryIndex === sequence.length - 1} onClick={() => setMemoryIndex((index) => index + 1)} rightIcon={<ChevronRight className="h-4 w-4" />}>Tiếp</Button></div>
               <Button fullWidth variant="secondary" onClick={beginRecall} leftIcon={<Eye className="h-5 w-5" />}>TÔI ĐÃ NHỚ XONG</Button>
             </>
