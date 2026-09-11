@@ -14,6 +14,7 @@ import { ResultView } from '../features/results/ResultView';
 import { StatisticsView } from '../features/statistics/StatisticsView';
 import { SettingsView } from '../features/settings/SettingsView';
 import { MemoryCardsView } from '../modules/memory-cards/MemoryCardsView';
+import { NumberSequenceView } from '../modules/number-sequence/NumberSequenceView';
 import { loadModulesFromSupabase } from '../core/module/module-loader';
 import { Database, RefreshCw, WifiOff } from 'lucide-react';
 
@@ -93,9 +94,9 @@ export const App: React.FC = () => {
           </>
         );
       case 'module-home':
-        return currentRoute.moduleId === 'memory-cards'
-          ? <MemoryCardsView />
-          : <ModuleHomeView moduleId={currentRoute.moduleId} />;
+        if (currentRoute.moduleId === 'memory-cards') return <MemoryCardsView />;
+        if (currentRoute.moduleId === 'memory-number-sequence') return <NumberSequenceView />;
+        return <ModuleHomeView moduleId={currentRoute.moduleId} />;
       case 'learning':
         return <UniversalLearningView key={currentRoute.moduleId} moduleId={currentRoute.moduleId} />;
       case 'training-setup':

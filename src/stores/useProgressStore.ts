@@ -8,7 +8,7 @@ import { TrainingSession, SessionAnswer } from '../core/training/training-types'
 import { progressRepository } from '../repositories';
 import { updateItemProgressRecord } from '../core/progress/mastery-engine';
 import { calculateModuleMasterySummary } from '../core/progress/statistics-engine';
-import { generateBestTimeKey } from '../core/training/scoring';
+import { generateBestTimeKey, requiresPerfectAccuracyForRecord } from '../core/training/scoring';
 
 interface ProgressState {
   moduleProgressMap: Record<string, ModuleProgress>;
@@ -109,7 +109,7 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
     const bestKey = generateBestTimeKey(moduleId, modeId, groupId || 'all', totalQuestions);
     const existingBest = await progressRepository.getBestTime(bestKey);
 
-    const requiresPerfectRecall = moduleId === 'memory-cards' && modeId === 'deck-order';
+    const requiresPerfectRecall = requiresPerfectAccuracyForRecord(moduleId, modeId);
     const isEligibleForBestTime = !requiresPerfectRecall || accuracy === 100;
     let isNewBestTime = false;
     // New best time if: no record exists OR higher accuracy OR same accuracy (or 100%) with lower time

@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { calculateAccuracy, calculateAverageReaction, generateBestTimeKey } from '../scoring';
+import {
+  calculateAccuracy,
+  calculateAverageReaction,
+  generateBestTimeKey,
+  requiresPerfectAccuracyForRecord,
+} from '../scoring';
 
 describe('Scoring & Best Time Rules (Section 70, 71, 72)', () => {
   it('should calculate accuracy percentage rounded to 1 decimal place', () => {
@@ -25,5 +30,11 @@ describe('Scoring & Best Time Rules (Section 70, 71, 72)', () => {
     const key10 = generateBestTimeKey('numbers-00-99', 'image-to-number', '00-99', 10);
     // Keys must not be equal when questionCount differs (Section 70: không được so 10 câu với 100 câu)
     expect(key).not.toBe(key10);
+  });
+
+  it('requires perfect recall for ordered card and number sequence records', () => {
+    expect(requiresPerfectAccuracyForRecord('memory-cards', 'deck-order')).toBe(true);
+    expect(requiresPerfectAccuracyForRecord('memory-number-sequence', 'number-recall')).toBe(true);
+    expect(requiresPerfectAccuracyForRecord('numbers-00-99', 'image-to-number')).toBe(false);
   });
 });

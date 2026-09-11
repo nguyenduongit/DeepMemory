@@ -29,3 +29,10 @@ export function generateBestTimeKey(
 ): string {
   return `${moduleId}__${modeId}__${groupId}__${questionCount}`;
 }
+
+export function requiresPerfectAccuracyForRecord(moduleId: string, modeId: string): boolean {
+  return (
+    (moduleId === 'memory-cards' && modeId === 'deck-order') ||
+    (moduleId === 'memory-number-sequence' && modeId === 'number-recall')
+  );
+}

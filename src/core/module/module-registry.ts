@@ -2,6 +2,7 @@ import { ModuleDefinition, ModuleCategory } from './module-types';
 import { numbersModule } from '../../modules/numbers';
 import { memoryPalaceModule } from '../../modules/memory/placeholder';
 import { memoryCardsModule } from '../../modules/memory-cards';
+import { numberSequenceModule } from '../../modules/number-sequence';
 import { worldCountriesModule } from '../../modules/world-countries';
 import { solarSystemModule } from '../../modules/science/placeholder';
 import { periodicTableModule } from '../../modules/periodic-table';
@@ -10,6 +11,7 @@ import { englishVocabularyModule } from '../../modules/english-vocabulary';
 export const moduleRegistry: ModuleDefinition[] = [
   // Trí nhớ
   numbersModule,
+  numberSequenceModule,
   memoryCardsModule,
   memoryPalaceModule,
 
