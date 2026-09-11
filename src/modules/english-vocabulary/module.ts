@@ -5,8 +5,8 @@ import { EnglishVocabularyItem } from './types';
 export const englishVocabularyModule: ModuleDefinition<EnglishVocabularyItem> = {
   id: 'language-english-vocab',
   name: 'Từ vựng tiếng Anh',
-  subtitle: '100 từ nền tảng A1',
-  description: 'Học từ, nghĩa, phiên âm IPA, loại từ và câu ví dụ theo 10 chủ đề quen thuộc.',
+  subtitle: '200 từ nền tảng A1–A2',
+  description: 'Học từ, nghĩa, phiên âm IPA, loại từ và câu ví dụ theo 20 chủ đề thiết thực.',
   category: 'language',
   icon: 'languages',
   colorTheme: '#ec4899',
@@ -15,7 +15,7 @@ export const englishVocabularyModule: ModuleDefinition<EnglishVocabularyItem> = 
   learning: {
     primary: (item) => ({ type: 'text', value: item.word }),
     title: (item) => item.vietnameseMeaning,
-    subtitle: (item) => `${item.pronunciation} • ${partOfSpeechLabels[item.partOfSpeech]}`,
+    subtitle: (item) => `${item.pronunciation} • ${partOfSpeechLabels[item.partOfSpeech]} • ${item.level}`,
     detail: (item) => `${item.example} — ${item.exampleTranslation}`,
   },
   trainingModes: englishVocabularyTrainingModes,

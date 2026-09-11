@@ -4,13 +4,14 @@ import { englishVocabulary } from '../data';
 import { englishVocabularyTestModule } from '../../../test/module-fixtures';
 
 describe('English vocabulary module', () => {
-  it('contains 100 complete and unique A1 words with reserved image paths', () => {
-    expect(englishVocabulary).toHaveLength(100);
-    expect(new Set(englishVocabulary.map((item) => item.id)).size).toBe(100);
-    expect(new Set(englishVocabulary.map((item) => item.word)).size).toBe(100);
+  it('contains 200 complete and unique A1-A2 words with reserved image paths', () => {
+    expect(englishVocabulary).toHaveLength(200);
+    expect(new Set(englishVocabulary.map((item) => item.id)).size).toBe(200);
+    expect(new Set(englishVocabulary.map((item) => item.word)).size).toBe(200);
+    expect(englishVocabulary.filter((item) => item.level === 'A1')).toHaveLength(100);
+    expect(englishVocabulary.filter((item) => item.level === 'A2')).toHaveLength(100);
 
     for (const item of englishVocabulary) {
-      expect(item.level).toBe('A1');
       expect(item.pronunciation).toMatch(/^\/.+\/$/);
       expect(item.vietnameseMeaning).not.toBe('');
       expect(item.example).not.toBe('');
@@ -19,13 +20,13 @@ describe('English vocabulary module', () => {
     }
   });
 
-  it('provides ten topic groups of ten words and one complete group', () => {
-    expect(englishVocabularyTestModule.groups).toHaveLength(11);
-    for (const group of englishVocabularyTestModule.groups?.slice(0, 10) ?? []) {
+  it('provides twenty topic groups of ten words and one complete group', () => {
+    expect(englishVocabularyTestModule.groups).toHaveLength(21);
+    for (const group of englishVocabularyTestModule.groups?.slice(0, 20) ?? []) {
       expect(englishVocabulary.filter(group.filter)).toHaveLength(10);
     }
     const allGroup = englishVocabularyTestModule.groups?.find((group) => group.id === 'all');
-    expect(allGroup && englishVocabulary.filter(allGroup.filter)).toHaveLength(100);
+    expect(allGroup && englishVocabulary.filter(allGroup.filter)).toHaveLength(200);
   });
 
   it('generates four unique choices for every training mode', () => {

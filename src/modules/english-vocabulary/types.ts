@@ -8,7 +8,17 @@ export type VocabularyTopicId =
   | 'time'
   | 'descriptions'
   | 'common-verbs'
-  | 'communication';
+  | 'communication'
+  | 'body'
+  | 'clothes'
+  | 'transport'
+  | 'work-study'
+  | 'shopping'
+  | 'health'
+  | 'weather'
+  | 'feelings'
+  | 'technology'
+  | 'daily-objects';
 
 export type VocabularyPartOfSpeech =
   | 'noun'
@@ -26,7 +36,7 @@ export interface EnglishVocabularyItem {
   example: string;
   exampleTranslation: string;
   topicId: VocabularyTopicId;
-  level: 'A1';
+  level: 'A1' | 'A2';
   imagePath: string;
   imageUrl?: string;
   sortOrder: number;

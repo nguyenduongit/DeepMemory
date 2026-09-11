@@ -12,6 +12,16 @@ const topics: Array<{ id: VocabularyTopicId; name: string }> = [
   { id: 'descriptions', name: 'Miêu tả' },
   { id: 'common-verbs', name: 'Động từ chung' },
   { id: 'communication', name: 'Giao tiếp' },
+  { id: 'body', name: 'Cơ thể' },
+  { id: 'clothes', name: 'Quần áo' },
+  { id: 'transport', name: 'Phương tiện' },
+  { id: 'work-study', name: 'Học tập & Công việc' },
+  { id: 'shopping', name: 'Mua sắm' },
+  { id: 'health', name: 'Sức khỏe' },
+  { id: 'weather', name: 'Thời tiết' },
+  { id: 'feelings', name: 'Cảm xúc' },
+  { id: 'technology', name: 'Công nghệ' },
+  { id: 'daily-objects', name: 'Đồ vật hằng ngày' },
 ];
 
 export const englishVocabularyGroups: ModuleGroup<EnglishVocabularyItem>[] = [
@@ -24,7 +34,7 @@ export const englishVocabularyGroups: ModuleGroup<EnglishVocabularyItem>[] = [
   {
     id: 'all',
     name: 'Tất cả',
-    description: '100 từ vựng nền tảng A1',
+    description: '200 từ vựng nền tảng A1–A2',
     filter: () => true,
   },
 ];

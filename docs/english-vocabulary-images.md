@@ -1,7 +1,7 @@
 # Ảnh cho module Từ vựng tiếng Anh
 
 Module hoạt động hoàn chỉnh bằng văn bản khi chưa có ảnh. Mỗi mục đã dành sẵn
-`imagePath` theo định dạng `vocab-001.webp` đến `vocab-100.webp`.
+`imagePath` theo định dạng `vocab-001.webp` đến `vocab-200.webp`.
 
 ## Quy trình dành cho coding agent
 
