@@ -10,6 +10,7 @@ import {
   clampIndex,
 } from '../../core/learning/learning-engine';
 import { ProgressBar } from '../../components/ui/ProgressBar';
+import { GroupPicker } from '../../components/ui/GroupPicker';
 import { ChevronLeft, ChevronRight, Grid3X3, Layers3 } from 'lucide-react';
 
 interface UniversalLearningViewProps {
@@ -33,6 +34,12 @@ export const UniversalLearningView: React.FC<UniversalLearningViewProps> = ({ mo
   const items = filterItemsByGroup(module?.items || [], selectedGroup);
   const totalCount = items.length;
   const currentItem = items[currentIndex];
+  const groupOptions = module?.groups?.map((group) => ({
+    id: group.id,
+    name: group.name,
+    itemCount: module.items.filter(group.filter).length,
+    isComplete: module.items.every(group.filter),
+  })) ?? [];
 
   const handleNext = useCallback(() => {
     setCurrentIndex((prev) => getNextIndex(prev, totalCount));
@@ -44,6 +51,9 @@ export const UniversalLearningView: React.FC<UniversalLearningViewProps> = ({ mo
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target?.closest('button, input, select, textarea, [role="dialog"]')) return;
+
       if (e.key === 'ArrowRight' || e.key === ' ') {
         e.preventDefault();
         handleNext();
@@ -95,27 +105,22 @@ export const UniversalLearningView: React.FC<UniversalLearningViewProps> = ({ mo
           subtitle="Học tập"
           showBack
           onBack={goBack}
-          rightAction={
-            module.groups && module.groups.length > 0 ? (
-              <select
-                aria-label="Chọn nhóm học tập"
-                value={selectedGroupId}
-                onChange={(e) => {
-                  setSelectedGroupId(e.target.value);
-                  setCurrentIndex(0);
-                }}
-                className="bg-slate-900 text-xs font-semibold text-slate-200 border border-slate-700/80 rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
-              >
-                {module.groups.map((group) => (
-                  <option key={group.id} value={group.id} className="bg-slate-900 text-slate-200">
-                    {group.name}
-                  </option>
-                ))}
-              </select>
-            ) : undefined
-          }
         />
       </div>
+
+      {module.groups && module.groups.length > 0 ? (
+        <div className="flex-none border-b border-slate-800/70 bg-slate-950/80 px-4 py-2">
+          <GroupPicker
+            label={moduleId === 'language-english-vocab' ? 'Chủ đề' : 'Nhóm học'}
+            options={groupOptions}
+            value={selectedGroupId}
+            onChange={(groupId) => {
+              setSelectedGroupId(groupId);
+              setCurrentIndex(0);
+            }}
+          />
+        </div>
+      ) : null}
 
       {Overview && (
         <div className="flex-none flex justify-center py-2 border-b border-slate-800/70 bg-slate-950/80">
